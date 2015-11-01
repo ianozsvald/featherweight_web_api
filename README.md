@@ -16,11 +16,11 @@ def myfn(x, c):
     """Example function"""
     return = x*x + c
 
-featherweight_api.register(myfn)  # register our function
+featherweight_api.register(myfn) 
 featherweight_api.run()  # run the server on localhost:5000
 ```
 
-If you put the following into your browser to make a GET request you'll get a successful result:
+If you put the following into the URL bar in your browser it'll make a GET request and you'll get a successful result:
 
 ```
 http://localhost:5000/myfn?x=2&c=10
