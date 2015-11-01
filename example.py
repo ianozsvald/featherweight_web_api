@@ -25,4 +25,5 @@ def my_badly_written_function():
 if __name__ == "__main__":
     featherweight_api.register(myfn)
     featherweight_api.register(my_badly_written_function)
-    featherweight_api.run()
+    #featherweight_api.run()  # serve on localhost:5000 by default
+    featherweight_api.run(host="0.0.0.0", port=8080)  # serve on a public IP on port 8080
