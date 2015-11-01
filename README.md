@@ -21,8 +21,11 @@ featherweight_api.run()  # run the server on localhost:5000
 ```
 
 If you put the following into your browser to make a GET request
+
 ```http://localhost:5000/myfn?x=2&c=10```
+
 then you'll get the correct output:
+
 ```{"success": true, "result": 14.0, "error_msg": null}```
 
 # If called without arguments using:
