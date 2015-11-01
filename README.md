@@ -5,7 +5,7 @@ Goals:
 * Make it easy to experiment with R&D code by serving it as a web-based API
 * Trivial function registration
 * Generation of useful error messages at run-time to help diagnose issues
-* Automatic conversion of text arguments to floats by default (can be disabled in `register`)
+* Automatic conversion of text arguments to `float` arguments by default (can be disabled in `register`)
 
 Example:
 
@@ -14,8 +14,7 @@ import featherweight_api
 
 def myfn(x, c):
     """Example function"""
-    result = x*x + c
-    return result
+    return = x*x + c
 
 featherweight_api.register(myfn)  # register our function
 featherweight_api.run()  # run the server on localhost:5000
