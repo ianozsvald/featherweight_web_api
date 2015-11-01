@@ -7,6 +7,11 @@ def myfn(x, c):
     return result
 
 
+def my_badly_written_function():
+    """Example function that raises an error"""
+    1/0
+
+
 # If called with arguments:
 # http://localhost:5000/myfn?x=2&c=10
 # we get a correct output:
@@ -19,4 +24,5 @@ def myfn(x, c):
 
 if __name__ == "__main__":
     featherweight_api.register(myfn)
+    featherweight_api.register(my_badly_written_function)
     featherweight_api.run()

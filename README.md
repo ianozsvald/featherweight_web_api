@@ -5,6 +5,7 @@ Goals:
 * Make it easy to experiment with R&D code by serving it as a web-based API
 * Specification-less function registration
 * Provision of useful error messages at run-time to diagnose issues
+* Automatic conversion of text arguments to floats by default (can be disabled during registration)
 
 Example:
 
@@ -32,8 +33,24 @@ then you'll get the correct output:
 {"success": true, "result": 14.0, "error_msg": null}
 ```
 
-# If called without arguments using:
-# http://localhost:5000/myfn
-# then we get a useful error message
-# {"result": null, "error_msg": "TypeError(\"myfn() missing 2 required positional arguments: 'x' and 'c'\",)", "success": false}
+If you call this without the right arguments such as:
+
+```
+http://localhost:5000/myfn
+```
+
+then we get a useful error message:
+```
+{"result": null, "error_msg": "TypeError(\"myfn() missing 2 required positional arguments: 'x' and 'c'\",)", "success": false}
+```
+
+If your code raises an exception (e.g. see this in `example.py`):
+```
+http://localhost:5000/my_badly_written_function
+```
+then you'll get a helpful debug message:
+```
+{"result": null, "success": false, "error_msg": "ZeroDivisionError('division by zero',)"}
+```
+
 
