@@ -29,6 +29,17 @@ http://localhost:5000/myfn?x=2&c=10
 {"success": true, "result": 14.0, "error_msg": null}
 ```
 
+NOTE - in Firefox you'll probably want to add the http://jsonview.com/ pretty-printer for a nicer (and easier to debug) output.
+
+You can also make this call at the command line:
+```
+$ curl "http://localhost:5000/myfn?x=2&c=10"
+{
+  "error_msg": null,
+  "result": 14.0,
+  "success": true}
+```
+
 If you call this without the right arguments then you'll get a useful error message:
 
 ```
@@ -37,12 +48,14 @@ http://localhost:5000/myfn
 {"result": null, "error_msg": "TypeError(\"myfn() missing 2 required positional arguments: 'x' and 'c'\",)", "success": false}
 ```
 
-If your code raises an exception (e.g. see this in `example.py`) then you'll get the error message:
+If your code raises an exception then you'll get a useful error message, here for example we can provide a bad argument:
 ```
-http://localhost:5000/my_badly_written_function
+http://localhost:5000/myfn?x=2&c=somemistake
 ->
-{"result": null, "success": false, "error_msg": "ZeroDivisionError('division by zero',)"}
-```
+{"error_msg": "TypeError(\"unsupported operand type(s) for +: 'float' and 'str'\",)", 
+ "result": null, 
+ "success": false 
+}```
 
 By default the `register` function has `auto_convert_arguments=True` whereby each argument that's passed into the call is converted from a string into a `float` (if possible).
 

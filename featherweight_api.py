@@ -1,6 +1,6 @@
 import json
 from functools import partial
-from flask import Flask, request
+from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 
@@ -15,7 +15,10 @@ def wrapper(fn, auto_convert_arguments):
     for k, v in dict(request.args).items():
         value = v[0]
         if auto_convert_arguments:
-            value = float(value)
+            try:
+                value = float(value)
+            except ValueError:
+                pass
         d[k] = value
     # call function
     success = True
@@ -26,7 +29,10 @@ def wrapper(fn, auto_convert_arguments):
     except Exception as err:
         error_msg = repr(err)
         success = False
-    return json.dumps({'result': result,
+    #return json.dumps({'result': result,
+                       #'error_msg': error_msg,
+                       #'success': success})
+    return jsonify({'result': result,
                        'error_msg': error_msg,
                        'success': success})
 
