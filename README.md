@@ -3,9 +3,9 @@ Featherweight web API provider for serving R&amp;D methods as web functions
 
 Goals:
 * Make it easy to experiment with R&D code by serving it as a web-based API
-* Specification-less function registration
-* Provision of useful error messages at run-time to diagnose issues
-* Automatic conversion of text arguments to floats by default (can be disabled during registration)
+* Trivial function registration
+* Generation of useful error messages at run-time to help diagnose issues
+* Automatic conversion of text arguments to floats by default (can be disabled in `register`)
 
 Example:
 
