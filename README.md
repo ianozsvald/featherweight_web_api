@@ -41,6 +41,14 @@ $ curl "http://localhost:5000/myfn?x=2&c=10"
 }
 ```
 
+`requests` makes calling this sort of API quite trivial!
+```
+In [1]: import requests
+In [2]: result=requests.get("http://localhost:5000/myfn?x=2&c=10")
+In [3]: result.json()
+Out[3]: {'error_msg': None, 'result': 14.0, 'success': True}
+```
+
 If you call this without the right arguments then you'll get a useful error message:
 
 ```
@@ -49,7 +57,8 @@ http://localhost:5000/myfn
 {
  "result": null,
  "success": false,
- "error_msg": "TypeError(\"myfn() missing 2 required positional arguments: 'x' and 'c'\",)"
+ "error_msg": "TypeError(\"myfn() missing 2 required 
+                           positional arguments: 'x' and 'c'\",)"
 }
 ```
 
