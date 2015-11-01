@@ -26,7 +26,10 @@ If you put the following into your browser to make a GET request you'll get a su
 ```
 http://localhost:5000/myfn?x=2&c=10
 ->
-{"success": true, "result": 14.0, "error_msg": null}
+{"result": 14.0,
+ "success": true, 
+ "error_msg": null
+}
 ```
 
 NOTE - in Firefox you'll probably want to add the http://jsonview.com/ pretty-printer for a nicer (and easier to debug) output.
@@ -35,9 +38,10 @@ You can also make this call at the command line:
 ```
 $ curl "http://localhost:5000/myfn?x=2&c=10"
 {
-  "error_msg": null,
   "result": 14.0,
-  "success": true}
+  "success": true,
+  "error_msg": null
+}
 ```
 
 If you call this without the right arguments then you'll get a useful error message:
@@ -45,17 +49,22 @@ If you call this without the right arguments then you'll get a useful error mess
 ```
 http://localhost:5000/myfn
 ->
-{"result": null, "error_msg": "TypeError(\"myfn() missing 2 required positional arguments: 'x' and 'c'\",)", "success": false}
+{
+ "result": null,
+ "success": false,
+ "error_msg": "TypeError(\"myfn() missing 2 required positional arguments: 'x' and 'c'\",)"
+}
 ```
 
 If your code raises an exception then you'll get a useful error message, here for example we can provide a bad argument:
 ```
 http://localhost:5000/myfn?x=2&c=somemistake
 ->
-{"error_msg": "TypeError(\"unsupported operand type(s) for +: 'float' and 'str'\",)", 
- "result": null, 
- "success": false 
-}```
+{"result": null, 
+ "success": false,
+ "error_msg": "TypeError(\"unsupported operand type(s) for +: 'float' and 'str'\",)", 
+}
+```
 
 By default the `register` function has `auto_convert_arguments=True` whereby each argument that's passed into the call is converted from a string into a `float` (if possible).
 
