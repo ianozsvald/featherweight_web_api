@@ -1,8 +1,43 @@
 import json
 from functools import partial
-from flask import Flask, request, jsonify
+from flask import Flask, request
 app = Flask(__name__)
 
+try:
+    import numpy as np
+except NameError:
+    pass # if numpy isn't available then the user can't be encoding using it
+
+class NumPyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        # numpy types aren't JSON-serialisable by default, we have to convert
+        # them to Python types
+        #if 'np' in dir():
+        try:
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            if isinstance(obj, np.str):
+                return str(obj)
+            if isinstance(obj, np.int_):
+                return obj.tolist() # int(obj)
+            if isinstance(obj, np.float_):
+                return float(obj)
+        except NameError:
+            pass # if numpy isn't available, we don't need to do any conversions
+        return json.JSONEncoder.default(self, obj)
+
+def jsonify_numpy(*args, **kwargs):
+    """Specialised version of Flask's jsonify which is numpy-friendly"""
+    # original jsonify code:
+    #indent = None
+    #return app.response_class(json.dumps(dict(*args, **kwargs),
+        #indent=indent),
+        #mimetype='application/json')
+
+    # encode the input args using our numpy-friendly encoder
+    encoded = json.dumps(*args, cls=NumPyEncoder)
+    return app.response_class(encoded,
+        mimetype='application/json')
 
 def wrapper(fn, auto_convert_arguments):
     """This gets called when user invokes the API
@@ -32,9 +67,13 @@ def wrapper(fn, auto_convert_arguments):
     #return json.dumps({'result': result,
                        #'error_msg': error_msg,
                        #'success': success})
-    return jsonify({'result': result,
-                       'error_msg': error_msg,
-                       'success': success})
+    #return jsonify({'result': result,
+                       #'error_msg': error_msg,
+                       #'success': success})
+    d = {'result': result,
+         'error_msg': error_msg,
+         'success': success}
+    return jsonify_numpy(d)
 
 
 def register(fn, auto_convert_arguments=True):

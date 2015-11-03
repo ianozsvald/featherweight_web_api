@@ -7,7 +7,7 @@ Goals:
 * Generation of useful error messages at run-time to help diagnose issues
 * Automatic conversion of text arguments to `float` arguments by default (can be disabled in `register`)
 
-Example:
+##Example (`example_tiny_function.py`):
 
 ```
 import featherweight_api
@@ -44,7 +44,7 @@ $ curl "http://localhost:5000/myfn?x=2&c=10"
 `requests` makes calling this sort of API quite trivial!
 ```
 In [1]: import requests
-In [2]: result=requests.get("http://localhost:5000/myfn?x=2&c=10")
+In [2]: result = requests.get("http://localhost:5000/myfn?x=2&c=10")
 In [3]: result.json()
 Out[3]: {'error_msg': None, 'result': 14.0, 'success': True}
 ```
@@ -71,6 +71,26 @@ http://localhost:5000/myfn?x=2&c=somemistake
  "error_msg": "TypeError(\"unsupported operand type(s) for +: 'float' and 'str'\",)", 
 }
 ```
+
+
+##Scikit-learn example (`example_iris.py`):
+
+You can do things like call a `sklearn` classifier. Behind the scenes `sklearn` uses `numpy` which doesn't work with the built-in `json` module, `featherweight` tries to make sensible encoding choices so you get the right JSON response:
+```
+http://localhost:5000/score?sepal_length=5.9&sepal_width=3&petal_length=5.1&petal_width=1.8
+->
+{
+    "result": 
+    {
+        "guessed_class": 2,
+        "guessed_label": "virginica"
+    },
+    "success": true,
+    "error_msg": null
+}
+```
+
+#Notes
 
 By default the `register` function has `auto_convert_arguments=True` whereby each argument that's passed into the call is converted from a string into a `float` (if possible).
 
