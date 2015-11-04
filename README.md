@@ -1,11 +1,11 @@
-# Featherweight R&D API Provider
-A "featherweight" Flask-based tool to convert your functions into Internet-callable functions
+# Featherweight function-to-Internet-callable-function server
+A "featherweight" Flask-based tool to convert your functions into Internet-callable functions, designed for R&D code that you want to put on your network.
 
 Goals:
 * Easily expose a Python function (or class method) as a web-enabled function for others to call
 * Publish a function using a Flask-server with just 3 lines
 * Useful error messages are provided at run-time to help diagnose issues
-* Text arguments are automatically converted to `float` arguments by default
+* Text arguments from an HTTP call are automatically converted to `float` arguments by default
 
 Written for:
 * Python 3.4+ 
