@@ -3,6 +3,7 @@ Expose Python functions (or class methods) as a web-enabled function for others 
 
 Goals:
 * "Featherweight" server which turns your R&D code into a web-enabled function
+* Solve the "but how can we quickly plumb our new-data-sci-code into the demo environment so it shows value to the bosses?" problem without writing a "proper server"
 * Publish a function using a Flask-server with just 3 lines
 * Supports `scikit-learn` and `numpy` objects (without making you think about correct `JSON` encoding) 
 * Useful error messages are provided at run-time to help diagnose issues
