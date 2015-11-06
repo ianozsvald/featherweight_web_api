@@ -111,3 +111,7 @@ In Firefox you'll probably want to add the http://jsonview.com/ pretty-printer f
 #Further steps
 
 You might want to look at https://flask-restful-cn.readthedocs.org/en/0.3.4/ or http://python-eve.org/ if you want to build stronger APIs.
+
+#Thanks
+
+This API was inspired by chats with Willem Ligtenberg who presented http://www.openanalytics.eu/r-service-bus at (BudapestBI2015)[https://budapestbi2015.sched.org/event/5b80622ad628092c9c7c72ab964a9ba2#.Vjx-x5cU5yQ].
