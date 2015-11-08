@@ -111,6 +111,8 @@ In Firefox you'll probably want to add the http://jsonview.com/ pretty-printer f
 
 #Further steps
 
+First of all you might want to take a step forward with JSON-RPC: https://github.com/cenobites/flask-jsonrpc
+
 You might want to look at https://flask-restful-cn.readthedocs.org/en/0.3.4/ or http://python-eve.org/ if you want to build stronger APIs.
 
 #Thanks
