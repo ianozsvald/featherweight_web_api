@@ -117,9 +117,15 @@ In Firefox you'll probably want to add the http://jsonview.com/ pretty-printer f
 
 #Further steps
 
-First of all you might want to take a step forward with JSON-RPC: https://github.com/cenobites/flask-jsonrpc
+* https://github.com/cenobites/flask-jsonrpc - JSON RPC
+* https://github.com/jmcarp/flask-apispec - Flask, JSON, Swagger using input-arg parsing and output marshalling
+* https://flask-restful-cn.readthedocs.org/en/latest - Flask based RESTful framework
+* http://python-eve.org/ if you want to build stronger APIs, uses Flask, SQLAlchemy or MongoDB, provides default entry points and lots more
 
-You might want to look at https://flask-restful-cn.readthedocs.org/en/0.3.4/ or http://python-eve.org/ if you want to build stronger APIs.
+#Possible additions
+
+* Python 3.5's type annotations could be used to sanity check the input (without you having to declare anything web-centric)
+* If a POST call was made we could check for a `json={...}` body and auto-decode and extract arguments (providing an opinionated way to send in JSON data that's also fairly standard)
 
 #Thanks
 
