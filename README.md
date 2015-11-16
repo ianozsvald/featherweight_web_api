@@ -119,6 +119,7 @@ In Firefox you'll probably want to add the http://jsonview.com/ pretty-printer f
 
 * https://github.com/cenobites/flask-jsonrpc - JSON RPC
 * https://github.com/jmcarp/flask-apispec - Flask, JSON, Swagger using input-arg parsing and output marshalling
+* https://github.com/timothycrosley/hug - Falcon based RESTful framework
 * https://flask-restful-cn.readthedocs.org/en/latest - Flask based RESTful framework
 * http://python-eve.org/ if you want to build stronger APIs, uses Flask, SQLAlchemy or MongoDB, provides default entry points and lots more
 
@@ -126,7 +127,13 @@ In Firefox you'll probably want to add the http://jsonview.com/ pretty-printer f
 
 * Python 3.5's type annotations could be used to sanity check the input (without you having to declare anything web-centric)
 * If a POST call was made we could check for a `json={...}` body and auto-decode and extract arguments (providing an opinionated way to send in JSON data that's also fairly standard)
+* Exposed docstrings as Swagger (but probably the more complex tools above offer this for free?)
+* Decorator support to avoid the registration (?)
 
 #Thanks
 
 This API was inspired by chats with [Willem Ligtenberg](https://twitter.com/wligtenberg) who presented http://www.openanalytics.eu/r-service-bus at [BudapestBI2015](https://budapestbi2015.sched.org/event/5b80622ad628092c9c7c72ab964a9ba2#.Vjx-x5cU5yQ).
+
+#Discussion
+
+* https://www.reddit.com/r/Python/comments/3snlwz/featherweight_functiontointernetcallablefunction/
