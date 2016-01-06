@@ -39,15 +39,18 @@ def jsonify_numpy(*args, **kwargs):
     return app.response_class(encoded,
         mimetype='application/json')
 
-def wrapper(fn, auto_convert_arguments):
-    """This gets called when user invokes the API
 
-    fn - the function we'll call when invoked
-    auto_convert_arguments - if True will use `float(arg)` on each input argument"""
+def extract_parameters(data, auto_convert_arguments):
+    """
+    Extract the parameters present on data. Data is a Dict with the parameters
+    received on the request
+
+    :param data: Dictionary with the data
+    :param auto_convert_arguments: If True, the parameters will be converted to float
+    :return: A dictionary with the data
+    """
     d = {}
-    # extract 1st item (as x=1&x=2&x=3 would generates a list of 3 x values)
-    # and build new kwarg dictionary
-    for k, v in dict(request.args).items():
+    for k, v in data.items():
         value = v[0]
         if auto_convert_arguments:
             try:
@@ -55,25 +58,44 @@ def wrapper(fn, auto_convert_arguments):
             except ValueError:
                 pass
         d[k] = value
+    return d
+
+
+def wrapper(fn, auto_convert_arguments):
+    """This gets called when user invokes the API
+
+    :param fn: the function we'll call when invoked
+    :param auto_convert_arguments: if True will use `float(arg)` on each input argument"""
+
+    result = {
+        'success': True,
+        'error_msg': None,
+        'result': None
+    }
+
+    if request.method == 'GET':
+        # extract 1st item (as x=1&x=2&x=3 would generates a list of 3 x values)
+        # and build new kwarg dictionary
+        request_parameters = dict(request.args)
+    elif request.method == 'POST':
+        request_parameters = dict(request.get_json())
+    else:
+        result['success'] = False
+        result['error_msg'] = 'Invalid method: "{}"'.format(request.method)
+        return result
+
     # call function
-    success = True
-    error_msg = None
-    result = None
     try:
-        result = fn(**d)
+        params = extract_parameters(request_parameters, auto_convert_arguments)
+        fn_result = fn(**params)
     except Exception as err:
-        error_msg = repr(err)
-        success = False
-    #return json.dumps({'result': result,
-                       #'error_msg': error_msg,
-                       #'success': success})
-    #return jsonify({'result': result,
-                       #'error_msg': error_msg,
-                       #'success': success})
-    d = {'result': result,
-         'error_msg': error_msg,
-         'success': success}
-    return jsonify_numpy(d)
+        result['success'] = False
+        result['error_msg'] = repr(err)
+        fn_result = None
+
+    result['result'] = fn_result
+
+    return jsonify_numpy(result)
 
 
 def register(fn, auto_convert_arguments=True):
