@@ -108,7 +108,7 @@ def register(fn, auto_convert_arguments=True):
     url = "/{}".format(fn_name)
     # create a partial function
     fn_wrapped = partial(wrapper, fn=fn, auto_convert_arguments=auto_convert_arguments)
-    app.add_url_rule(url, fn_name, fn_wrapped)
+    app.add_url_rule(url, fn_name, fn_wrapped, methods=['GET', 'POST'])
 
 
 def run(host=None, port=None, debug=True):
