@@ -63,6 +63,17 @@ In [3]: result.json()
 Out[3]: {'error_msg': None, 'result': 14.0, 'success': True}
 ```
 
+We can use `curl` to send a `POST` request:
+```
+curl -H "Content-Type: application/json" -X POST --data '{"x":2,"c":10}' http://localhost:5000/myfn
+->
+{
+  "result": 14,
+  "success": true,
+  "error_msg": null
+}
+```
+
 If you call this without the right arguments then you'll get a useful error message:
 
 ```
@@ -105,6 +116,10 @@ http://localhost:5000/score?sepal_length=5.9&sepal_width=3&petal_length=5.1&peta
 }
 ```
 
+##Scipy example (`example_scipy.py`):
+
+Shows a call to `optimize.fmbound` (thanks Peadar!).
+
 #Notes
 
 By default the `register` function has `auto_convert_arguments=True` whereby each argument that's passed into the call is converted from a string into a `float` (if possible).
@@ -126,9 +141,9 @@ In Firefox you'll probably want to add the http://jsonview.com/ pretty-printer f
 #Possible additions
 
 * Python 3.5's type annotations could be used to sanity check the input (without you having to declare anything web-centric)
-* If a POST call was made we could check for a `json={...}` body and auto-decode and extract arguments (providing an opinionated way to send in JSON data that's also fairly standard)
 * Exposed docstrings as Swagger (but probably the more complex tools above offer this for free?)
 * Decorator support to avoid the registration (?)
+* The current tests are very light, these need to be extended to cover more cases and data types
 
 #Thanks
 

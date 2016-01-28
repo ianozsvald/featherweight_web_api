@@ -39,41 +39,79 @@ def jsonify_numpy(*args, **kwargs):
     return app.response_class(encoded,
         mimetype='application/json')
 
+
+def extract_parameters(data, auto_convert_arguments, request_is_a_get):
+    """
+    Extract the parameters present on data. Data is a Dict with the parameters
+    received on the request
+
+    :param data: Dictionary with the data
+    :param auto_convert_arguments: If True, the parameters will be converted to float
+    :return: A dictionary with the data
+    """
+    d = {}
+    if request_is_a_get:
+        # GET requests are all-text, so we *might* need to convert them
+        # and their value is always a list of items, we only ever want the
+        # first item
+        for k, v in data.items():
+            value = v[0]
+            if auto_convert_arguments:
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass
+            d[k] = value
+    else:
+        # POST requests are encoded as text, ints or whatever, so we
+        # don't need to decode and we always get a key-value pair
+        for k, v in data.items():
+            value = v
+            d[k] = value
+    return d
+
+
 def wrapper(fn, auto_convert_arguments):
     """This gets called when user invokes the API
 
-    fn - the function we'll call when invoked
-    auto_convert_arguments - if True will use `float(arg)` on each input argument"""
-    d = {}
-    # extract 1st item (as x=1&x=2&x=3 would generates a list of 3 x values)
-    # and build new kwarg dictionary
-    for k, v in dict(request.args).items():
-        value = v[0]
-        if auto_convert_arguments:
-            try:
-                value = float(value)
-            except ValueError:
-                pass
-        d[k] = value
+    :param fn: the function we'll call when invoked
+    :param auto_convert_arguments: if True will use `float(arg)` on each input argument"""
+
+    result = {
+        'success': True,
+        'error_msg': None,
+        'result': None
+    }
+
+    request_is_a_get = True
+
+    if request.method == 'GET':
+        # extract 1st item (as x=1&x=2&x=3 would generates a list of 3 x values)
+        # and build new kwarg dictionary
+        request_parameters = dict(request.args)
+    elif request.method == 'POST':
+        jsn = request.get_json()
+        assert jsn is not None, "The JSON decode is None, did you pass in good JSON and the application/json mimetype?"
+        request_parameters = dict(jsn)
+        auto_convert_arguments = None
+        request_is_a_get = False
+    else:
+        result['success'] = False
+        result['error_msg'] = 'Invalid method: "{}"'.format(request.method)
+        return result
+
     # call function
-    success = True
-    error_msg = None
-    result = None
     try:
-        result = fn(**d)
+        params = extract_parameters(request_parameters, auto_convert_arguments, request_is_a_get)
+        fn_result = fn(**params)
     except Exception as err:
-        error_msg = repr(err)
-        success = False
-    #return json.dumps({'result': result,
-                       #'error_msg': error_msg,
-                       #'success': success})
-    #return jsonify({'result': result,
-                       #'error_msg': error_msg,
-                       #'success': success})
-    d = {'result': result,
-         'error_msg': error_msg,
-         'success': success}
-    return jsonify_numpy(d)
+        result['success'] = False
+        result['error_msg'] = repr(err)
+        fn_result = None
+
+    result['result'] = fn_result
+
+    return jsonify_numpy(result)
 
 
 def register(fn, auto_convert_arguments=True):
@@ -86,7 +124,7 @@ def register(fn, auto_convert_arguments=True):
     url = "/{}".format(fn_name)
     # create a partial function
     fn_wrapped = partial(wrapper, fn=fn, auto_convert_arguments=auto_convert_arguments)
-    app.add_url_rule(url, fn_name, fn_wrapped)
+    app.add_url_rule(url, fn_name, fn_wrapped, methods=['GET', 'POST'])
 
 
 def run(host=None, port=None, debug=True):

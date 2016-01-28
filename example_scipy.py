@@ -1,10 +1,13 @@
 import numpy as np
 import featherweight_api
 from scipy import optimize
+
 def f(x):
     return x**2 + 10*np.sin(x)
+
 def function(b, c):
     return optimize.fminbound(f, b, c)
+
 # If called with arguments:
 # http://127.0.0.1:5000/function?b=2&c=10
 # we get a correct output:
