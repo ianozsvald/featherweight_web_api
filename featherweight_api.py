@@ -40,7 +40,7 @@ def jsonify_numpy(*args, **kwargs):
         mimetype='application/json')
 
 
-def extract_parameters(data, auto_convert_arguments):
+def extract_parameters(data, auto_convert_arguments, request_is_a_get):
     """
     Extract the parameters present on data. Data is a Dict with the parameters
     received on the request
@@ -50,14 +50,24 @@ def extract_parameters(data, auto_convert_arguments):
     :return: A dictionary with the data
     """
     d = {}
-    for k, v in data.items():
-        value = v[0]
-        if auto_convert_arguments:
-            try:
-                value = float(value)
-            except ValueError:
-                pass
-        d[k] = value
+    if request_is_a_get:
+        # GET requests are all-text, so we *might* need to convert them
+        # and their value is always a list of items, we only ever want the
+        # first item
+        for k, v in data.items():
+            value = v[0]
+            if auto_convert_arguments:
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass
+            d[k] = value
+    else:
+        # POST requests are encoded as text, ints or whatever, so we
+        # don't need to decode and we always get a key-value pair
+        for k, v in data.items():
+            value = v
+            d[k] = value
     return d
 
 
@@ -73,12 +83,18 @@ def wrapper(fn, auto_convert_arguments):
         'result': None
     }
 
+    request_is_a_get = True
+
     if request.method == 'GET':
         # extract 1st item (as x=1&x=2&x=3 would generates a list of 3 x values)
         # and build new kwarg dictionary
         request_parameters = dict(request.args)
     elif request.method == 'POST':
-        request_parameters = dict(request.get_json())
+        jsn = request.get_json()
+        assert jsn is not None, "The JSON decode is None, did you pass in good JSON and the application/json mimetype?"
+        request_parameters = dict(jsn)
+        auto_convert_arguments = None
+        request_is_a_get = False
     else:
         result['success'] = False
         result['error_msg'] = 'Invalid method: "{}"'.format(request.method)
@@ -86,7 +102,7 @@ def wrapper(fn, auto_convert_arguments):
 
     # call function
     try:
-        params = extract_parameters(request_parameters, auto_convert_arguments)
+        params = extract_parameters(request_parameters, auto_convert_arguments, request_is_a_get)
         fn_result = fn(**params)
     except Exception as err:
         result['success'] = False

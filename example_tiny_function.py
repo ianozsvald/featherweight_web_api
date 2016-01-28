@@ -3,6 +3,7 @@ import featherweight_api
 
 def myfn(x, c):
     """Example function"""
+    print("DEMO x={} c={}".format(x, c))  # prints to the console that ran featherweight
     result = x*x + c
     return result
 
