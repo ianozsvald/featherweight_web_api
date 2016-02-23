@@ -2,7 +2,7 @@
 Expose Python functions (or class methods) as a web-enabled function for others to call
 
 
-> "I used your featherweight_api in order to deploy a phishing classifier as a prototype REST service. By using your API I definitely reduced the time to market a lot." - _Alejandro Correa Bahnsen, Lead Data Scientist at Easy Solutions, Colombia_
+> "I used your featherweight_api in order to deploy a phishing classifier as a prototype REST service. By using your API I definitely reduced the time to market a lot." - _Alejandro Correa Bahnsen, Lead Data Scientist at Easy Solutions, Colombia (Feb 2016)_
 
 Goals:
 * Data scientist focused tool to publish simple APIs
