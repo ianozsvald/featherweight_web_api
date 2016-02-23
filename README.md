@@ -1,6 +1,9 @@
 # Featherweight function-to-Internet-callable-function server
 Expose Python functions (or class methods) as a web-enabled function for others to call
 
+
+> "I used your featherweight_api in order to deploy a phishing classifier as an REST service. By using your API I definitely reduced the time to market a lot." - _Alejandro Correa Bahnsen_
+
 Goals:
 * Data scientist focused tool to publish simple APIs
 * It is a "featherweight" server which turns your R&D code into a web-enabled function
